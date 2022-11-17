@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "A starter nodejs CMS.",
   "main": "index.js",
+  "bin": {
+    "amira": "./cli/index.js"
+  },
   "directories": {
     "lib": "lib"
   },
