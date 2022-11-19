@@ -2,10 +2,18 @@
 
 const Server = require('./lib/server');
 
-Server.serve = async function(html = require('./lib/html')) {
+/**
+ * Handles the request via http or https.
+ * 
+ * @param {function} html
+ * 	A function which will override how the html screen.
+ * @return {object}
+ *  Returns a nodejs server.
+ **/
+Server.serve = async function(html) {
 	const bodyParser = require("body-parser");
 	const app = require('express')();
-	const uploadLimit = this.config('uploadLimit')||'2MB';
+	const uploadLimit = Server.config('uploadLimit')||'2MB';
 
 	app.use(
 		require('cookie-parser')(),
@@ -17,7 +25,7 @@ Server.serve = async function(html = require('./lib/html')) {
 	);
 
 	// Handle gql related requests
-	const endPoint = this.config('endPoint');
+	const endPoint = Server.config('endPoint');
 	const {initGQL, renderGQL} = require('./lib/gql');
 
 	app.use(endPoint, initGQL);
@@ -26,12 +34,23 @@ Server.serve = async function(html = require('./lib/html')) {
 	app.post(endPoint, renderGQL);
 	app.get(endPoint, renderGQL);
 
-	// Client handler
-	app.get('*', (q, r, n) => html(q, r, n));
+	const {renderAdmin, renderHTML} = require('./lib/html');
 
-	const ssl = this.config('ssl');
-	const host = this.config('host');
-	const port = this.config('port');
+	// Admin Hanlder
+	app.get(
+		'/admin',
+		(q, r, n) => renderAdmin(q, r, n, html)
+	);
+
+	// Client handler
+	app.get(
+		'*',
+		(q, r, n) => renderHTML(q, r, n, html)
+	);
+
+	const ssl = Server.config('ssl');
+	const host = Server.config('host');
+	const port = Server.config('port');
 
 	if (ssl) {
 		return require('https')
@@ -44,4 +63,6 @@ Server.serve = async function(html = require('./lib/html')) {
 		.listen(port, host);
 }
 
-module.exports = Server;
+module.exports = {
+	...Server
+}

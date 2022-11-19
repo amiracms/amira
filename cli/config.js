@@ -1,81 +1,74 @@
 "use strict";
 
-const [,,,flag] = process.argv;
 const path = require('path');
+const _ = require('underscore');
 const basePath = process.cwd();
 const {writeFile} = require('fs/promises');
 const envConfig = require('./env');
 const Config = require('../lib/config');
 const {Prompt} = require('./utils');
 
-module.exports = async function() {
-	const isSilent = '-y' === flag;
+const Server = require('../lib/server');
+Object.assign(Server, require('../lib/settings'));
+Object.assign(Server, require('../lib/user'));
+
+module.exports = async function(flag) {
 	const config = Config();
-	const isUpdate = config && config.name;
 
-	console.log('Generating configuration file.')
-
-	if (isSilent) {
-		// Create 
+	//if (_.isEmpty(config)) {
+		// Create configuration file
 		await writeFile(
 			path.resolve(basePath, '.env'),
 			envConfig(config)
 		);
 
-		const newConfig = Config();
+		//return;
+	//}
 
-		console.log(newConfig);
+	
+	
 
+	// Check database connection
+	const [err] = await Server.db.connect();
+
+	if (err) {
+		throw err;
+	}
+
+	// Create or update database tables
+	const type = Server.config('database');
+	const {install_mysql_tables} = require('./install');
+
+	if ('MySQL' === type) {
+		await install_mysql_tables();
+	}
+
+	// Set default settings if not exist
+	const settings = await Server.get_settings();
+
+	// Set default settings but don't override
+	// existing settings
+	await maybe_set_setting(settings, 'name');
+	await maybe_set_setting(settings, 'tagline');
+	await maybe_set_setting(settings, 'lang');
+	await maybe_set_setting(settings, 'adminEmail');
+
+	// Maybe set administrator
+}
+
+async function maybe_set_setting(settings, name) {
+	if (settings[name]) {
 		return;
 	}
 
-	await Prompt({
-		host: {
-			label: 'Hostname where the application listens to',
-			value: 'localhost'
-		},
-		port: {
-			label: 'The port number where the application runs to',
-			value: 80
-		},
-		ssl: {
-			label: 'Use SSL? (enter \'y\' or \'n\')',
-			callback() {
-				if (!config.ssl || 'n' === config.ssl) {
-					// Clear previous ssl data
-					config.ssl = false;
-					config.ssl_key = '';
-					config.ssl_cert = '';
-					config.ssl_ca = '';
-					return;
-				}
+	const [err] = await Server.set_setting(
+		name,
+		Server.config(name)
+	);
 
-				// Change ssl value
-				config.ssl = true;
+	if (err) {
+		Server.db.close();
 
-				console.log('The absolute location where the SSL certificates reside.');
-
-				return Prompt({
-					ssl_key: {
-						label: 'SSL Key'
-					},
-					ssl_cert: {
-						label: 'SSL Cert'
-					},
-					ssl_ca: {
-						label: 'SSL_CA'
-					}
-				}, config)
-			}
-		},
-		name: {
-			label: 'Application Name'
-		},
-		tagline: {
-			label: 'Brief Description'
-		},
-		adminEmail: {
-			label: 'Admin Email Address'
-		}
-	}, config);
+		throw err;
+	}
 }

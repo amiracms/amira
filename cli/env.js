@@ -14,7 +14,17 @@ module.exports = function({
 	adminEmail,
 	endPoint = '/' + randomSalt(16, 16, 'hex'),
 	clientId = randomSalt(16, 32, 'hex'),
-	clientSecret = randomSalt(64)
+	clientSecret = randomSalt(64),
+	database = 'MySQL',
+	prefix = 'ma_',
+	MySQL_Database = '',
+	MySQL_Host = 'localhost',
+	MySQL_Port = 3306,
+	MySQL_User = 'root',
+	MySQL_Password = '',
+	MySQL_SSL = false,
+	MySQL_cert = '',
+	MySQL_ca = ''
 }) {
 	return `## This is a configuration file. 
 ## All contents are important and are vital for the application to work.
@@ -64,5 +74,42 @@ adminEmail = ${adminEmail||''}
 
 ## Language use. Default is 'en'.
 lang = ${lang}
+
+## The type of database use to store the data to. Default is MySQL.
+database = ${database}
+
+## The prefix to use when creating database tables
+prefix = ${prefix}
+
+## MySQL Database Configuration ##
+## The name of the database where to store the application's data.
+MySQL_Database = ${MySQL_Database}
+
+## The hostname of the database to connect to.
+MySQL_Host = ${MySQL_Host}
+
+## The port number of the database to connect to.
+MySQL_Port = ${MySQL_Port}
+
+## The MySQL user to use for authentication.
+MySQL_User = ${MySQL_User}
+
+## The MySQL password that goes with the user.
+MySQL_Password = ${MySQL_Password}
+
+## Whether the database uses SSL when establishing a connection.
+MySQL_SSL = ${MySQL_SSL}
+
+## If your database connection is using SSL, you may add the SSL options
+## by prefixing each option with MySQL_SSL_{option_name}. For more information about
+## the SSL options, you may refer to https://github.com/mysqljs/mysql#ssl-options
+## For ca and cert, simply remove the comment to the options below then
+## write the relative path location of the files.
+
+## The relative path location of the certificate(s) to trust.
+MySQL_SSL_ca = 
+
+## The relative path location of the client certificate to use as handshake.
+MySQL_SSL_cert =
 	`;
 }
