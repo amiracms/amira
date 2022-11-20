@@ -62,8 +62,29 @@ exports.install_mysql_tables = async function() {
 		throw err3;
 	}
 
-	// Page
+	/**
 	const [err4] = await db.query(
+		`CREATE TABLE IF NOT EXISTS ?? (
+		\`userId\` BIGINT(20) NOT NULL,
+		\`sessionId\` VARCHAR(100) NOT NULL,
+		\`platform\` VARCHAR(255),
+		\`status\` VARCHAR(10) NOT NULL,
+		\`date\` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+		FOREIGN KEY (\`userId\`) 
+			REFERENCES ${user}(\`Id\`) ON DELETE CASCADE
+		)`,
+		[db.table_name('user_session')]
+	);
+
+	if (err4) {
+		db.close();
+
+		throw err4;
+	}
+	**/
+
+	// Page
+	const [err5] = await db.query(
 		`CREATE TABLE IF NOT EXISTS ?? (
 		\`Id\` BIGINT(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
 		\`group\` VARCHAR(30) NOT NULL,
@@ -78,9 +99,9 @@ exports.install_mysql_tables = async function() {
 		[db.table_name('page')]
 	);
 
-	if (err4) {
+	if (err5) {
 		db.close();
 		
-		throw err4;
+		throw err5;
 	}
 }

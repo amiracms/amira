@@ -25,9 +25,6 @@ module.exports = async function(flag) {
 		//return;
 	//}
 
-	
-	
-
 	// Check database connection
 	const [err] = await Server.db.connect();
 
@@ -54,6 +51,12 @@ module.exports = async function(flag) {
 	await maybe_set_setting(settings, 'adminEmail');
 
 	// Maybe set administrator
+	await Server.create_user({
+		email: 'admin@local.local',
+		group: 'administrator',
+		status: 'active',
+		pass: 'admin'
+	});
 }
 
 async function maybe_set_setting(settings, name) {
