@@ -8,23 +8,20 @@ const envConfig = require('./env');
 const Config = require('../lib/config');
 const {Prompt} = require('./utils');
 
-const Server = require('../lib/server');
-Object.assign(Server, require('../lib/settings'));
-Object.assign(Server, require('../lib/user'));
-Object.assign(Server, require('../lib/page'));
+const Server = require('../lib');
 
 module.exports = async function(flag) {
 	const config = Config();
 
-	//if (_.isEmpty(config)) {
+	if (_.isEmpty(config)) {
 		// Create configuration file
 		await writeFile(
 			path.resolve(basePath, '.env'),
 			envConfig(config)
 		);
 
-		//return;
-	//}
+		return;
+	}
 
 	// Check database connection
 	const [err] = await Server.db.connect();

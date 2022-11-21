@@ -74,4 +74,5 @@ after(async () => {
 
 require('./gql/config');
 require('./gql/user');
+require('./gql/settings');
 require('./gql/page');

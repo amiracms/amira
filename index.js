@@ -1,6 +1,6 @@
 "use strict";
 
-const Server = require('./lib/server');
+const Server = require('./lib');
 
 /**
  * Handles the request via http or https.
