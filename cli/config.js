@@ -11,6 +11,7 @@ const {Prompt} = require('./utils');
 const Server = require('../lib/server');
 Object.assign(Server, require('../lib/settings'));
 Object.assign(Server, require('../lib/user'));
+Object.assign(Server, require('../lib/page'));
 
 module.exports = async function(flag) {
 	const config = Config();
