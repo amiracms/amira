@@ -39,6 +39,7 @@ global.postRequest = async function(query, variables) {
 	return httpRequest.post(endPoint)
 		.set('X-Client-Id', hashId)
 		.set('X-Client-Secret', hashSecret)
+		.set('X-Session-Id', Server.sessionId||null)
 		.send({query, variables: variables});
 
 }

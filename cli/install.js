@@ -62,6 +62,22 @@ exports.install_mysql_tables = async function() {
 		throw err3;
 	}
 
+	const [err4] = await db.query(
+		`CREATE TABLE IF NOT EXISTS ?? (
+		\`Id\` BIGINT(20) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+		\`name\` VARCHAR(50) NOT NULL UNIQUE,
+		\`slug\` VARCHAR(160) NOT NULL,
+		\`description\` VARCHAR(255),
+		\`caps\` LONGTEXT
+		)`,
+		[db.table_name('usergroup')]
+	);
+
+	if (err4) {
+		db.close();
+		throw err4;
+	}
+
 	/**
 	const [err4] = await db.query(
 		`CREATE TABLE IF NOT EXISTS ?? (
