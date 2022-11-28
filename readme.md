@@ -1,8 +1,7 @@
 # Amira
-Amira is a simple starter CMS for nodejs.
-It is design to cater the core requirements of a Content Management type of application.
+Amira is a simple starter CMS module for nodejs. It is design to cater the core requirements of a Content Management type of application.
 
-Despite the simplicity of it's structure, the application itself is still usuable without any alteration. 
+By default *Amira* does not contain much but the module allows you to create an application without any code alteration.
 
 ## Installation
 ```ssh
@@ -13,4 +12,15 @@ After installation you'll gonna have to navigate to your application's main fold
 ```ssh
 $ amira config
 ```
-You may edit **.env** file accordingly to set the right configuration options to run your application. Then run the config command again to validate your configuration and set the default settings.
+
+You may edit **.env** file to set the right configuration to run your application. Then run the config command again to validate your configuration and set the default settings.
+
+## Usage
+
+#### .serve(port: Int, host: String, ssl: Object, html: Function)
+
+#### .serveClient(port: Int, host: String, ssl: Object, html: Function)
+
+#### .serveAdmin(port: Int, host: String, ssl: Object, html: Function)
+
+#### .serveAPI(port: Int, host: String, ssl: Object)

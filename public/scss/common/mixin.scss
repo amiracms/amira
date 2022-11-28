@@ -1,0 +1,56 @@
+@mixin clear-after {
+	&:after {
+		content: "";
+		display: block;
+		clear: both;
+		height: 0;
+		overflow: hidden;
+	}
+}
+
+@mixin clear-before {
+	&:before {
+		content: "";
+		display: block;
+		clear: both;
+		height: 0;
+		overflow: hidden;
+	}
+}
+
+@mixin clear {
+	@include clear-before;
+	@include clear-after;
+}
+
+@mixin center {
+	&:before {
+		content: "";
+		display: inline-block;
+		vertical-align: middle;
+		box-sizing: border-box;
+		height: 100%;
+		width: 0;
+		margin: 0;
+		padding: 0;
+		border: 0;
+		line-height: 0;
+		overflow: hidden;
+	}
+}
+
+@mixin rowColumns($length) {
+	$width: calc(100%/$length);
+
+	.col {
+		width: $width;
+	}
+
+	@for $_ from 2 through $length {
+		.col-#{$_} {
+			@extend .col;
+			
+			width: calc($width*$_);
+		}
+	}
+}

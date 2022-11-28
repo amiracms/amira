@@ -1,0 +1,30 @@
+<!--
+	The default templater to display a form type component.
+
+	@data {object} attr
+	@data {string} title
+	@data {string} description
+	-->
+<form @data-attr>
+	<If context="@data-title">
+		<h3 class="form-title">
+			<Data value="@data-title"/>
+		</h3>
+	</If> 
+	<If context="@data-description">
+		<p class="description">
+			<Data value="@data-description"/>
+		</p>
+	</If>
+	<Alert>
+		<div class="alert alert-@data-type">
+			<p><Data value="@data-message"/></p>
+		</div>
+	</Alert>
+	<InputField/>
+	<p class="submit">
+		<button type="submit">
+			<Data value="@data-submitLabel"/>
+		</button>
+	</p>
+</form>

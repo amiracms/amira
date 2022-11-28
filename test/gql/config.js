@@ -16,9 +16,8 @@ describe('Describe GQL Config', function() {
 							templates
 						}
 					}`,
-				{platform: {}}
+				{platform: null}
 			)
-
 
 			const data = res.body.data;
 

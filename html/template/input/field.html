@@ -1,0 +1,30 @@
+<!--
+	The templater use to display field component.
+
+	@data {string} className
+	-->
+<div class="@data-className">
+	<If context="@data-label">
+		<label class="input-label">
+			<Data value="@data-label"/>
+		</label>
+	</If>
+	<If context="@data-pre">
+		<p class="pre desc">
+			<Data value="@data-pre"/>
+		</p>
+	</If>
+	<div class="input">
+		<Input/>
+		<If context="@data-error">
+			<span class="error">
+				<Data value="@data-error"/>
+			</span>
+		</If>
+	</div>
+	<If context="@data-sub">
+		<p class="sub desc">
+			<Data value="@data-sub"/>
+		</p>
+	</If>
+</div>

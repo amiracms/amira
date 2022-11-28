@@ -7,7 +7,6 @@ const {writeFile} = require('fs/promises');
 const envConfig = require('./env');
 const Config = require('../lib/config');
 const {Prompt} = require('./utils');
-
 const Server = require('../lib');
 
 module.exports = async function(flag) {
@@ -55,6 +54,8 @@ module.exports = async function(flag) {
 		status: 'active',
 		pass: 'admin'
 	});
+
+	Server.db.close();
 }
 
 async function maybe_set_setting(settings, name) {

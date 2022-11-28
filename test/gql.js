@@ -10,22 +10,22 @@ const should = chai.should();
 chai.use(chaiHttp);
 
 const httpRequest = chai.request(app).keepOpen();
-const Server = require('../lib/server');
 const {initGQL, renderGQL} = require('../lib/gql');
 const {generateHashKey} = require('../lib/utils');
+const Server = require('../lib');
 
 global.getRequest = async function(query, variables) {
 	const endPoint = Server.config('endPoint');
 	const clientId = Server.config('clientId');
 	const clientSecret = Server.config('clientSecret');
-	const [, hashId] = await generateHashKey(clientId);
+	const [e, hashId] = await generateHashKey(clientId);
 	const [, hashSecret] = await generateHashKey(clientSecret);
 
 	return httpRequest
 		.get(endPoint)
 		.set('X-Client-Id', hashId)
 		.set('X-Client-Secret', hashSecret)
-		.set('X-Session-Id', Server.sessionId||null)
+		.set('X-Session-Id', Server.sessionId||'')
 		.query({query, variables: JSON.stringify(variables)});
 }
 
@@ -39,7 +39,7 @@ global.postRequest = async function(query, variables) {
 	return httpRequest.post(endPoint)
 		.set('X-Client-Id', hashId)
 		.set('X-Client-Secret', hashSecret)
-		.set('X-Session-Id', Server.sessionId||null)
+		.set('X-Session-Id', Server.sessionId||'')
 		.send({query, variables: variables});
 
 }
